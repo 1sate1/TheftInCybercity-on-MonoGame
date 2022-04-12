@@ -11,6 +11,7 @@ namespace TheftInCybercity
         public static void Draw(SpriteBatch spriteBatch)
         {
             //spriteBatch.Draw(Background, Vector2.Zero, Color.White);
+            //for test
             spriteBatch.DrawString(Font, "Theft in Cybercity", Vector2.Zero, Color.White);
         }
 
