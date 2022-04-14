@@ -8,7 +8,6 @@ namespace TheftInCybercity
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D logo;
 
         public Game1()
         {
@@ -20,7 +19,9 @@ namespace TheftInCybercity
 
         protected override void Initialize()
         {
-            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             base.Initialize();
         }
@@ -28,8 +29,9 @@ namespace TheftInCybercity
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Splashscreen.Font = Content.Load<SpriteFont>("splashfont");
-            logo = Content.Load<Texture2D>("logo");
+            Menu.Background = Content.Load<Texture2D>("background");
+            Menu.Logo = Content.Load<SpriteFont>("logo");
+            Menu.MenuButtons = Content.Load<SpriteFont>("menuButton");
             base.LoadContent();
         }
 
@@ -47,8 +49,7 @@ namespace TheftInCybercity
         {
             GraphicsDevice.Clear(Color.FromNonPremultiplied(147, 202, 246, 100));
             spriteBatch.Begin();
-            Splashscreen.Draw(spriteBatch);
-            spriteBatch.Draw(logo, new Vector2(, graphics.PreferredBackBufferHeight), Color.White);
+            Menu.Draw(spriteBatch);            
             spriteBatch.End();
             base.Draw(gameTime);
         }
