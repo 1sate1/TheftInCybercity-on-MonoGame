@@ -14,8 +14,8 @@ namespace TheftInCybercity
 
     internal class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        readonly GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch = default!;
         Stat Stat = Stat.Menu;
 
         public Game1()
