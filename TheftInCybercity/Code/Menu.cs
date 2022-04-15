@@ -21,5 +21,10 @@ namespace TheftInCybercity
             spriteBatch.DrawString(MenuButtons, "start game", startButtonPos, Color.White);
             spriteBatch.DrawString(MenuButtons, "exit game", exitButtonPos, Color.White);
         }
+
+        public static void Update()
+        {
+
+        }
     }
 }

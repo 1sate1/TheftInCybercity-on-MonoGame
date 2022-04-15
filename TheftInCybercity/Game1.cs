@@ -4,10 +4,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
+    enum Stat
+    {
+        Menu,
+        Game,
+        Pause,
+        Dead,
+    }
+
     internal class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Stat Stat = Stat.Menu;
 
         public Game1()
         {
@@ -42,6 +51,21 @@ namespace TheftInCybercity
 
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState keyboardState = Keyboard.GetState();
+
+            switch (Stat)
+            {
+                case Stat.Menu:
+                    Menu.Update();
+                    if (keyboardState.IsKeyDown(Keys.Space)) Stat = Stat.Game;
+                    break;
+                case Stat.Game:
+                    if (keyboardState.IsKeyDown(Keys.Escape)) Stat = Stat.Menu;
+                    break;                    
+            }
+
+            if (keyboardState.IsKeyDown(Keys.E)) Exit();
+
             base.Update(gameTime);
         }
 
@@ -49,7 +73,16 @@ namespace TheftInCybercity
         {
             GraphicsDevice.Clear(Color.FromNonPremultiplied(147, 202, 246, 100));
             spriteBatch.Begin();
-            Menu.Draw(spriteBatch);            
+            switch(Stat)
+            {
+                case Stat.Menu:
+                    Menu.Draw(spriteBatch);
+                    break;
+                case Stat.Game:
+                    //Game.Draw(spriteBatch);
+                    break;
+            }
+                       
             spriteBatch.End();
             base.Draw(gameTime);
         }
