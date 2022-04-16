@@ -7,9 +7,9 @@ namespace TheftInCybercity
     internal class Game1 : Game
     {
         readonly GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch = default!;
+        SpriteBatch spriteBatch = null!;
 
-        private Player _player = null!;
+        private List<Sprite> _sprites = null!;
 
         public Game1()
         {
@@ -32,15 +32,36 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Menu.Background = Content.Load<Texture2D>("background");
+            //Menu.Background = Content.Load<Texture2D>("background");
 
             var texture = Content.Load<Texture2D>("box");
 
-            _player = new(texture)
+            _sprites = new List<Sprite>()
             {
-                Position = new Vector2(100, 100),
-                Speed = 3f,
+                new Sprite(texture)
+                {
+                  Position = new Vector2(100, 100),
+                  Input = new Input()
+                  {
+                    Up = Keys.W,
+                    Left = Keys.A,
+                    Down = Keys.S,                   
+                    Right = Keys.D,
+                  },
+                },
+                new Sprite(texture)
+                {
+                  Position = new Vector2(200, 100),
+                  Input = new Input()
+                  {
+                    Up = Keys.Up,
+                    Left = Keys.Left,
+                    Down = Keys.Down,                    
+                    Right = Keys.Right,
+                  },
+                },
             };
+
             //Menu.Logo = Content.Load<SpriteFont>("logo");
             //Menu.MenuButtons = Content.Load<SpriteFont>("menuButton");
             base.LoadContent();
@@ -52,11 +73,11 @@ namespace TheftInCybercity
         }
 
         protected override void Update(GameTime gameTime)
-        {
-            KeyboardState keyboardState = Keyboard.GetState();
+        {           
+            foreach (var sprite in _sprites)
+                sprite.Update();
 
-            _player.Update();
-            
+            KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Escape)) Exit();
 
             base.Update(gameTime);
@@ -66,7 +87,10 @@ namespace TheftInCybercity
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            _player.Draw(spriteBatch);
+
+            foreach (var sprite in _sprites)
+                sprite.Draw(spriteBatch);
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
