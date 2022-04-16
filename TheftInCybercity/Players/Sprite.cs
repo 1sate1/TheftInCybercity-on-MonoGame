@@ -6,7 +6,7 @@ namespace TheftInCybercity
 {
     public class Sprite
     {
-        private Texture2D _texture;
+        protected Texture2D _texture;
 
         public Vector2 Position;
 

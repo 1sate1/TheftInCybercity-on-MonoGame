@@ -4,12 +4,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
-    internal class Game1 : Game
+    public class Game1 : Game
     {
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch = null!;
 
         private List<Sprite> _sprites = null!;
+
+        private Color _backgroundColour = Color.CornflowerBlue;
+
 
         public Game1()
         {
@@ -31,8 +34,6 @@ namespace TheftInCybercity
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Menu.Background = Content.Load<Texture2D>("background");
 
             var texture = Content.Load<Texture2D>("box");
 
@@ -62,8 +63,6 @@ namespace TheftInCybercity
                 },
             };
 
-            //Menu.Logo = Content.Load<SpriteFont>("logo");
-            //Menu.MenuButtons = Content.Load<SpriteFont>("menuButton");
             base.LoadContent();
         }
 
@@ -73,7 +72,7 @@ namespace TheftInCybercity
         }
 
         protected override void Update(GameTime gameTime)
-        {           
+        {
             foreach (var sprite in _sprites)
                 sprite.Update();
 
@@ -85,7 +84,7 @@ namespace TheftInCybercity
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(_backgroundColour);
             spriteBatch.Begin();
 
             foreach (var sprite in _sprites)
