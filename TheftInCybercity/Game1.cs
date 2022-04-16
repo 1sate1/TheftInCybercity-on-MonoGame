@@ -4,19 +4,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
-    enum Stat
-    {
-        Menu,
-        Game,
-        Pause,
-        Dead,
-    }
-
     internal class Game1 : Game
     {
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch = default!;
-        Stat Stat = Stat.Menu;
+
+        private Player _player = null!;
 
         public Game1()
         {
@@ -38,9 +31,18 @@ namespace TheftInCybercity
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             Menu.Background = Content.Load<Texture2D>("background");
-            Menu.Logo = Content.Load<SpriteFont>("logo");
-            Menu.MenuButtons = Content.Load<SpriteFont>("menuButton");
+
+            var texture = Content.Load<Texture2D>("box");
+
+            _player = new(texture)
+            {
+                Position = new Vector2(100, 100),
+                Speed = 3f,
+            };
+            //Menu.Logo = Content.Load<SpriteFont>("logo");
+            //Menu.MenuButtons = Content.Load<SpriteFont>("menuButton");
             base.LoadContent();
         }
 
@@ -53,36 +55,18 @@ namespace TheftInCybercity
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
-            switch (Stat)
-            {
-                case Stat.Menu:
-                    Menu.Update();
-                    if (keyboardState.IsKeyDown(Keys.Space)) Stat = Stat.Game;
-                    break;
-                case Stat.Game:
-                    if (keyboardState.IsKeyDown(Keys.Escape)) Stat = Stat.Menu;
-                    break;                    
-            }
-
-            if (keyboardState.IsKeyDown(Keys.E)) Exit();
+            _player.Update();
+            
+            if (keyboardState.IsKeyDown(Keys.Escape)) Exit();
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.FromNonPremultiplied(147, 202, 246, 100));
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            switch(Stat)
-            {
-                case Stat.Menu:
-                    Menu.Draw(spriteBatch);
-                    break;
-                case Stat.Game:
-                    //Game.Draw(spriteBatch);
-                    break;
-            }
-                       
+            _player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -6,7 +6,6 @@ namespace TheftInCybercity
     static class Menu
     {
         public static Texture2D Background { get; set; } = default!;
-
         public static SpriteFont Logo { get; set; } = default!;
         static Vector2 logoPos = new(1920 - 1440, 40);
 
@@ -17,8 +16,7 @@ namespace TheftInCybercity
         public static void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Background, Vector2.Zero, Color.White);
-            spriteBatch.DrawString(Logo, "theft in cybercity", logoPos, Color.White);
-            
+            spriteBatch.DrawString(Logo, "theft in cybercity", logoPos, Color.White);           
             spriteBatch.DrawString(MenuButtons, "start game", startButtonPos, Color.White);
             spriteBatch.DrawString(MenuButtons, "exit game", exitButtonPos, Color.White);
         }
