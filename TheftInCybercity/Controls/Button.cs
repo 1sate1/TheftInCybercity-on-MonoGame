@@ -2,12 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace TheftInCybercity.Controls
+namespace TheftInCybercity
 {
     public class Button : Component
     {
-        #region Fields
-
         private MouseState _currentMouse;
 
         private readonly SpriteFont _font;
@@ -17,10 +15,6 @@ namespace TheftInCybercity.Controls
         private MouseState _previousMouse;
 
         private readonly Texture2D _texture;
-
-        #endregion
-
-        #region Properties
 
         public event EventHandler Click = null!;
 
@@ -39,10 +33,6 @@ namespace TheftInCybercity.Controls
         }
 
         public string Text { get; set; } = null!;
-
-        #endregion
-
-        #region Methods
 
         public Button(Texture2D texture, SpriteFont font)
         {
@@ -91,6 +81,5 @@ namespace TheftInCybercity.Controls
             }
         }
 
-        #endregion
     }
 }

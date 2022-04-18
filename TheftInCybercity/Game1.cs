@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TheftInCybercity.Controls;
 
 namespace TheftInCybercity
 {
@@ -15,15 +14,22 @@ namespace TheftInCybercity
 
     public class Game1 : Game
     {
-        #region Fields
-
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch = null!;
 
+        #region ForPlayer
+
+        public Texture2D _texture = null!;
+        public Vector2 Position;
+        public bool jumping;
+        public float startY = 0f;
+        public float jumpspeed = 0f;
+
+        #endregion
+
+        #region ForMenu
+
         Stat Stat = Stat.Menu;
-
-        private List<Sprite> _sprites = null!;
-
         private List<Component> _buttons = null!;
 
         #endregion
@@ -49,35 +55,13 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region Players
+            #region Player
 
-            var texture = Content.Load<Texture2D>("box");
-
-            _sprites = new List<Sprite>()
-            {
-                new Sprite(texture)
-                {
-                  Position = new Vector2(100, 100),
-                  Input = new Input()
-                  {
-                    Up = Keys.W,
-                    Left = Keys.A,
-                    Down = Keys.S,
-                    Right = Keys.D,
-                  },
-                },
-                new Sprite(texture)
-                {
-                  Position = new Vector2(200, 100),
-                  Input = new Input()
-                  {
-                    Up = Keys.Up,
-                    Left = Keys.Left,
-                    Down = Keys.Down,
-                    Right = Keys.Right,
-                  },
-                },
-            };
+            _texture = Content.Load<Texture2D>("box");
+            Position = new Vector2(230, 450);
+            startY = Position.Y;
+            jumping = false;
+            jumpspeed = 0;
 
             #endregion
 
@@ -106,6 +90,7 @@ namespace TheftInCybercity
             };
 
             #endregion
+            
         }
 
         #region ClickEvents
@@ -138,13 +123,42 @@ namespace TheftInCybercity
                 case Stat.Game:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
-                    foreach (var sprite in _sprites)
-                        sprite.Update();                   
+                    Jump();
+                                  
                     break;
-            }            
+            }
 
             base.Update(gameTime);
         }
+
+        #region PlayerMove
+
+        private void Jump()
+        {
+            KeyboardState keyState = Keyboard.GetState();
+
+            if (jumping)
+            {
+                Position.Y += jumpspeed;
+                jumpspeed += 1;
+                if (Position.Y >= startY)
+                {
+                    Position.Y = startY;
+                    jumping = false;
+                }
+            }
+
+            else
+            {
+                if (keyState.IsKeyDown(Keys.W))
+                {
+                    jumping = true;
+                    jumpspeed = -14;
+                }
+            }
+        }
+
+        #endregion
 
         protected override void Draw(GameTime gameTime)
         {
@@ -158,8 +172,7 @@ namespace TheftInCybercity
                         component.Draw(gameTime, spriteBatch);
                     break;
                 case Stat.Game:
-                    foreach (var sprite in _sprites)
-                        sprite.Draw(spriteBatch);
+                    spriteBatch.Draw(_texture, Position, Color.White);
                     break;
             }
 
