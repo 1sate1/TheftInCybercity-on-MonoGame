@@ -1,18 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TheftInCybercity.Controls;
 
 namespace TheftInCybercity
 {
+    enum Stat
+    {
+        Menu,
+        Game,
+        Pause,
+        Dead
+    }
+
     public class Game1 : Game
     {
+        #region Fields
+
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch = null!;
 
+        Stat Stat = Stat.Menu;
+
         private List<Sprite> _sprites = null!;
 
-        private Color _backgroundColour = Color.CornflowerBlue;
+        private List<Component> _buttons = null!;
 
+        #endregion
 
         public Game1()
         {
@@ -35,6 +49,8 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            #region Players
+
             var texture = Content.Load<Texture2D>("box");
 
             _sprites = new List<Sprite>()
@@ -46,7 +62,7 @@ namespace TheftInCybercity
                   {
                     Up = Keys.W,
                     Left = Keys.A,
-                    Down = Keys.S,                   
+                    Down = Keys.S,
                     Right = Keys.D,
                   },
                 },
@@ -57,38 +73,95 @@ namespace TheftInCybercity
                   {
                     Up = Keys.Up,
                     Left = Keys.Left,
-                    Down = Keys.Down,                    
+                    Down = Keys.Down,
                     Right = Keys.Right,
                   },
                 },
             };
 
-            base.LoadContent();
+            #endregion
+
+            #region MenuButtons
+
+            var playButton = new Button(Content.Load<Texture2D>("Controls/Button"), Content.Load<SpriteFont>("Fonts/Font"))
+            {
+                Position = new Vector2(898, 480),
+                Text = "Play game",
+            };
+
+            playButton.Click += PlayButton_Click;
+
+            var quitButton = new Button(Content.Load<Texture2D>("Controls/Button"), Content.Load<SpriteFont>("Fonts/Font"))
+            {
+                Position = new Vector2(898, 540),
+                Text = "Quit",
+            };
+
+            quitButton.Click += QuitButton_Click;
+
+            _buttons = new List<Component>()
+            {
+              playButton,
+              quitButton,
+            };
+
+            #endregion
         }
 
-        protected override void UnloadContent()
+        #region ClickEvents
+
+        private void PlayButton_Click(object sender, System.EventArgs e)
         {
-            
+            Stat = Stat.Game;
         }
+
+        private void QuitButton_Click(object sender, System.EventArgs e)
+        {
+            Exit();
+        }
+
+        #endregion
+
+        protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {
-            foreach (var sprite in _sprites)
-                sprite.Update();
+            switch (Stat)
+            {
+                case Stat.Menu:
+                    foreach (var button in _buttons)
+                        button.Update(gameTime);
+                    break;
+                case Stat.Pause:
+                    Exit();
+                    break;
+                case Stat.Game:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Escape)) Exit();
+                    foreach (var sprite in _sprites)
+                        sprite.Update();                   
+                    break;
+            }            
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(_backgroundColour);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            foreach (var sprite in _sprites)
-                sprite.Draw(spriteBatch);
+            switch (Stat)
+            {
+                case Stat.Menu:
+                    foreach (var component in _buttons)
+                        component.Draw(gameTime, spriteBatch);
+                    break;
+                case Stat.Game:
+                    foreach (var sprite in _sprites)
+                        sprite.Draw(spriteBatch);
+                    break;
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);
