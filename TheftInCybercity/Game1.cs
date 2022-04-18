@@ -83,18 +83,18 @@ namespace TheftInCybercity
 
             #region MenuButtons
 
-            var playButton = new Button(Content.Load<Texture2D>("Controls/Button"), Content.Load<SpriteFont>("Fonts/Font"))
+            var playButton = new Button(Content.Load<Texture2D>("Controls/playGame"), Content.Load<SpriteFont>("Fonts/Font"))
             {
-                Position = new Vector2(898, 480),
-                Text = "Play game",
+                Position = new Vector2(x: 70, y: 605),
+                Text = "",
             };
 
             playButton.Click += PlayButton_Click;
 
-            var quitButton = new Button(Content.Load<Texture2D>("Controls/Button"), Content.Load<SpriteFont>("Fonts/Font"))
+            var quitButton = new Button(Content.Load<Texture2D>("Controls/quitGame"), Content.Load<SpriteFont>("Fonts/Font"))
             {
-                Position = new Vector2(898, 540),
-                Text = "Quit",
+                Position = new Vector2(x: 70, y: 805),
+                Text = "",
             };
 
             quitButton.Click += QuitButton_Click;
