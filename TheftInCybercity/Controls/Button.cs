@@ -6,18 +6,19 @@ namespace TheftInCybercity
 {
     public class Button : Component
     {
+        #region Fields
+
         private MouseState _currentMouse;
-
         private MouseState _previousMouse;
+        public Texture2D _texture = null!;
 
-        private readonly Texture2D _texture;
+        #endregion
+
+        #region Properties
 
         public event EventHandler Click = null!;
-
         public bool Clicked { get; private set; }
-
         public Vector2 Position { get; set; }
-
         public Rectangle Rectangle
         {
             get
@@ -26,10 +27,9 @@ namespace TheftInCybercity
             }
         }
 
-        public Button(Texture2D texture)
-        {
-            _texture = texture;
-        }
+        #endregion
+
+        #region Methods
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -48,5 +48,6 @@ namespace TheftInCybercity
                     Click?.Invoke(this, new EventArgs());
         }
 
+        #endregion
     }
 }
