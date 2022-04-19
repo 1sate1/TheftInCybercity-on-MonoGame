@@ -58,7 +58,7 @@ namespace TheftInCybercity
             #region Player
 
             _texture = Content.Load<Texture2D>("box");
-            Position = new Vector2(230, 450);
+            Position = new Vector2(400, 450);
             startY = Position.Y;
             jumping = false;
             jumpspeed = 0;
@@ -67,18 +67,16 @@ namespace TheftInCybercity
 
             #region MenuButtons
 
-            var playButton = new Button(Content.Load<Texture2D>("Controls/playGame"), Content.Load<SpriteFont>("Fonts/Font"))
+            var playButton = new Button(Content.Load<Texture2D>("Controls/playGame"))
             {
                 Position = new Vector2(x: 70, y: 605),
-                Text = "",
             };
 
             playButton.Click += PlayButton_Click;
 
-            var quitButton = new Button(Content.Load<Texture2D>("Controls/quitGame"), Content.Load<SpriteFont>("Fonts/Font"))
+            var quitButton = new Button(Content.Load<Texture2D>("Controls/quitGame"))
             {
                 Position = new Vector2(x: 70, y: 805),
-                Text = "",
             };
 
             quitButton.Click += QuitButton_Click;
