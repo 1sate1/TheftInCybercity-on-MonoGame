@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
+#nullable disable
     public class Player : Component
     {
         #region Fields
 
-        public Texture2D _texture = null!;
+        public Texture2D _texture;
         public Vector2 Position;
         public bool _jumping;
         public float _startY = 0f;

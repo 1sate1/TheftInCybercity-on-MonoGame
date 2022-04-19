@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
+#nullable disable
+
     enum Stat
     {
         Menu,
@@ -15,14 +17,14 @@ namespace TheftInCybercity
     public class Game1 : Game
     {
         readonly GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch = null!;
+        private SpriteBatch spriteBatch;
 
         private Player _player;
 
         #region ForMenu
 
         Stat Stat = Stat.Menu;
-        private List<Component> _buttons = null!;
+        private List<Component> _buttons;
 
         #endregion
 
@@ -36,9 +38,9 @@ namespace TheftInCybercity
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.IsFullScreen = false;
             graphics.ApplyChanges();
             base.Initialize();
         }
@@ -65,7 +67,7 @@ namespace TheftInCybercity
             var playButton = new Button()
             {
                 _texture = Content.Load<Texture2D>("Controls/playGame"),
-                Position = new Vector2(x: 70, y: 605),
+                Position = new Vector2(x: 70, y: 525),
             };
 
             playButton.Click += PlayButton_Click;
@@ -73,7 +75,7 @@ namespace TheftInCybercity
             var quitButton = new Button()
             {
                 _texture = Content.Load<Texture2D>("Controls/quitGame"),
-                Position = new Vector2(x: 70, y: 805),
+                Position = new Vector2(x: 70, y: 700),
             };
 
             quitButton.Click += QuitButton_Click;

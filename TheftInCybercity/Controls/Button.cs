@@ -4,19 +4,20 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TheftInCybercity
 {
+#nullable disable
     public class Button : Component
     {
         #region Fields
 
         private MouseState _currentMouse;
         private MouseState _previousMouse;
-        public Texture2D _texture = null!;
+        public Texture2D _texture;
 
         #endregion
 
         #region Properties
 
-        public event EventHandler Click = null!;
+        public event EventHandler Click;
         public bool Clicked { get; private set; }
         public Vector2 Position { get; set; }
         public Rectangle Rectangle
