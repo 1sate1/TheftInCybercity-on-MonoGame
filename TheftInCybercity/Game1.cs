@@ -51,14 +51,14 @@ namespace TheftInCybercity
 
             #region Player
 
-            _player = new Player()
-            {
-                _texture = Content.Load<Texture2D>("box"),
-                Position = new Vector2(400, 450),
-                _startY = Position.Y,
-                _jumping = false,
-                _jumpspeed = 0,
-            };
+            //_player = new Player()
+            //{
+            //    _texture = Content.Load<Texture2D>("box"),
+            //    Position = new Vector2(400, 450),
+            //    _startY = Position.Y,
+            //    _jumping = false,
+            //    _jumpspeed = 0,
+            //};
 
             #endregion
 
