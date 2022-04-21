@@ -21,12 +21,10 @@ namespace TheftInCybercity
 
         private Player _player;
 
-        #region ForMenu
+        List<Platform> _platforms = new List<Platform>();
 
         Stat Stat = Stat.Menu;
         private List<Component> _buttons;
-
-        #endregion
 
         public Game1()
         {
@@ -51,33 +49,24 @@ namespace TheftInCybercity
 
             #region Player
 
-            //_player = new Player()
-            //{
-            //    _texture = Content.Load<Texture2D>("box"),
-            //    Position = new Vector2(400, 450),
-            //    _startY = Position.Y,
-            //    _jumping = false,
-            //    _jumpspeed = 0,
-            //};
+            _player = new Player(Content.Load<Texture2D>("Player/bart1"), new Vector2(300, 500 - 144));
+
+            #endregion
+
+            #region Platforms
+
+            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(300, 500)));
+            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(600, 400)));
+            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(900, 500)));
 
             #endregion
 
             #region MenuButtons
 
-            var playButton = new Button()
-            {
-                _texture = Content.Load<Texture2D>("Controls/playGame"),
-                Position = new Vector2(x: 70, y: 525),
-            };
-
+            var playButton = new Button(Content.Load<Texture2D>("Controls/playGame"), new Vector2(70, 525));
             playButton.Click += PlayButton_Click;
 
-            var quitButton = new Button()
-            {
-                _texture = Content.Load<Texture2D>("Controls/quitGame"),
-                Position = new Vector2(x: 70, y: 700),
-            };
-
+            var quitButton = new Button(Content.Load<Texture2D>("Controls/quitGame"), new Vector2(70, 700));
             quitButton.Click += QuitButton_Click;
 
             _buttons = new List<Component>()
@@ -120,6 +109,13 @@ namespace TheftInCybercity
                 case Stat.Game:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
+                    foreach (var _platform in _platforms)
+                        if (_player._rectangle.Intersects(_platform._rectangle))
+                        {
+                            _player.Velocity.Y = 0f;
+                            _player._jumping = false;
+                        }
+
                     _player.Update(gameTime);
                                   
                     break;
@@ -140,6 +136,8 @@ namespace TheftInCybercity
                         component.Draw(gameTime, spriteBatch);
                     break;
                 case Stat.Game:
+                    foreach (var _platform in _platforms)
+                        _platform.Draw(gameTime, spriteBatch);
                     _player.Draw(gameTime, spriteBatch);
                     break;
             }

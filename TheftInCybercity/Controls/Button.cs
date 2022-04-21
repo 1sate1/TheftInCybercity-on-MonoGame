@@ -32,6 +32,12 @@ namespace TheftInCybercity
 
         #region Methods
 
+        public Button(Texture2D newTexture, Vector2 newPosition)
+        {
+            _texture = newTexture;
+            Position = newPosition;
+        }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Rectangle, Color.White);

@@ -10,14 +10,20 @@ namespace TheftInCybercity
         #region Fields
 
         public Texture2D _texture;
+        public Rectangle _rectangle;
         public Vector2 Position;
+        public Vector2 Velocity;            
         public bool _jumping;
-        public float _startY = 0f;
-        public float _jumpspeed = 0f;
-
+         
         #endregion
 
         #region Methods
+
+        public Player(Texture2D newTexture, Vector2 newPosition)
+        {
+            _texture = newTexture;
+            Position = newPosition;
+        }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -26,27 +32,22 @@ namespace TheftInCybercity
 
         public override void Update(GameTime gameTime)
         {
-            KeyboardState keyState = Keyboard.GetState();
+            Position += Velocity;
+            _rectangle = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
-            if (_jumping)
+            if (Keyboard.GetState().IsKeyDown(Keys.A)) Velocity.X = -3f;
+            else if (Keyboard.GetState().IsKeyDown(Keys.D)) Velocity.X = 3f;
+            else Velocity.X = 0f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && _jumping == false)
             {
-                Position.X += _jumpspeed;
-                _jumpspeed += 1;
-                if (Position.Y >= _startY)
-                {
-                    Position.Y = _startY;
-                    _jumping = false;
-                }
+                Position.Y -= 10f;
+                Velocity.Y = -5f;
+                _jumping = true;
             }
 
-            else
-            {
-                if (keyState.IsKeyDown(Keys.W))
-                {
-                    _jumping = true;
-                    _jumpspeed = -14;
-                }
-            }
+            float i = 1;
+            Velocity.Y += 0.15f * i;
         }
 
         #endregion
