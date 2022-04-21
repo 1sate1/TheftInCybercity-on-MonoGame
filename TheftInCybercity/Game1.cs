@@ -21,7 +21,7 @@ namespace TheftInCybercity
 
         private Player _player;
 
-        List<Platform> _platforms = new List<Platform>();
+        private readonly List<Platform> _platforms = new();
 
         Stat Stat = Stat.Menu;
         private List<Component> _buttons;
@@ -55,9 +55,9 @@ namespace TheftInCybercity
 
             #region Platforms
 
-            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(300, 500)));
-            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(600, 400)));
-            _platforms.Add(new Platform(Content.Load<Texture2D>("platform"), new Vector2(900, 500)));
+            _platforms.Add(new Platform(Content.Load<Texture2D>("Platform/platform"), new Vector2(300, 500)));
+            _platforms.Add(new Platform(Content.Load<Texture2D>("Platform/platform"), new Vector2(600, 400)));
+            _platforms.Add(new Platform(Content.Load<Texture2D>("Platform/platform"), new Vector2(900, 500)));
 
             #endregion
 
@@ -118,6 +118,9 @@ namespace TheftInCybercity
 
                     _player.Update(gameTime);
                                   
+                    break;
+                case Stat.Dead:
+                    Exit();
                     break;
             }
 
