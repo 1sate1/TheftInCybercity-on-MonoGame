@@ -56,7 +56,7 @@
 /processorParam:TextureFormat=Color
 /build:Platform/platform.png
 
-#begin Player/bart1.png
+#begin Player/staying/staying1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -66,5 +66,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Player/bart1.png
+/build:Player/staying/staying1.png
 

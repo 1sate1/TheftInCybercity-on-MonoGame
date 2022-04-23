@@ -9,9 +9,9 @@ namespace TheftInCybercity
     {
         #region Fields
 
-        private MouseState _currentMouse;
-        private MouseState _previousMouse;
-        public Texture2D _texture;
+        protected MouseState _currentMouse;
+        protected MouseState _previousMouse;
+        protected Texture2D _texture;
 
         #endregion
 
@@ -20,13 +20,7 @@ namespace TheftInCybercity
         public event EventHandler Click;
         public bool Clicked { get; private set; }
         public Vector2 Position { get; set; }
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
-            }
-        }
+        public Rectangle Rectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); } }
 
         #endregion
 
@@ -38,10 +32,7 @@ namespace TheftInCybercity
             Position = newPosition;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Rectangle, Color.White);
-        }
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, Rectangle, Color.White);
 
         public override void Update(GameTime gameTime)
         {

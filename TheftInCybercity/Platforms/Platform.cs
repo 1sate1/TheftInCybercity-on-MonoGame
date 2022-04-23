@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace TheftInCybercity
 {
@@ -8,9 +10,14 @@ namespace TheftInCybercity
     {
         #region Fields
 
-        public Texture2D _texture;
-        public Vector2 Position;
-        public Rectangle _rectangle;
+        protected Texture2D _texture;
+        public Vector2 _position;
+
+        #endregion
+
+        #region Properties
+
+        public Rectangle Rectangle { get { return new Rectangle((int)_position.X, (int)_position.Y, _texture.Width, _texture.Height); } }
 
         #endregion
 
@@ -19,11 +26,10 @@ namespace TheftInCybercity
         public Platform(Texture2D newTexture, Vector2 newPosition) 
         {
             _texture = newTexture;
-            Position = newPosition;
-            _rectangle = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height); 
+            _position = newPosition;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, _rectangle, Color.White);
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, Rectangle, Color.White);
 
         public override void Update(GameTime gameTime)
         {

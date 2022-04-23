@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 namespace TheftInCybercity
 {
 #nullable disable
-
     enum Stat
     {
         Menu,
@@ -49,7 +48,7 @@ namespace TheftInCybercity
 
             #region Player
 
-            _player = new Player(Content.Load<Texture2D>("Player/bart1"), new Vector2(300, 500 - 144));
+            _player = new Player(Content.Load<Texture2D>("Player/staying/staying1"), new Vector2(300, 500 - 175));
 
             #endregion
 
@@ -110,14 +109,12 @@ namespace TheftInCybercity
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
                     foreach (var _platform in _platforms)
-                        if (_player._rectangle.Intersects(_platform._rectangle))
+                        if (_player.Rectangle.Intersects(_platform.Rectangle))
                         {
-                            _player.Velocity.Y = 0f;
+                            _player._velocity.Y = 0f;
                             _player._jumping = false;
                         }
-
-                    _player.Update(gameTime);
-                                  
+                    _player.Update(gameTime);                                 
                     break;
                 case Stat.Dead:
                     Exit();

@@ -9,12 +9,17 @@ namespace TheftInCybercity
     {
         #region Fields
 
-        public Texture2D _texture;
-        public Rectangle _rectangle;
-        public Vector2 Position;
-        public Vector2 Velocity;            
+        protected Texture2D _texture;
+        protected Vector2 _position;
+        public Vector2 _velocity;            
         public bool _jumping;
-         
+
+        #endregion
+
+        #region Properties
+
+        public Rectangle Rectangle { get { return new Rectangle((int)_position.X, (int)_position.Y, _texture.Width, _texture.Height); } }
+
         #endregion
 
         #region Methods
@@ -22,32 +27,28 @@ namespace TheftInCybercity
         public Player(Texture2D newTexture, Vector2 newPosition)
         {
             _texture = newTexture;
-            Position = newPosition;
+            _position = newPosition;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Position, Color.White);
-        }
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, _position, Color.White);
 
         public override void Update(GameTime gameTime)
         {
-            Position += Velocity;
-            _rectangle = new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+            _position += _velocity;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) Velocity.X = -3f;
-            else if (Keyboard.GetState().IsKeyDown(Keys.D)) Velocity.X = 3f;
-            else Velocity.X = 0f;
+            if (Keyboard.GetState().IsKeyDown(Keys.A)) _velocity.X = -3f;
+            else if (Keyboard.GetState().IsKeyDown(Keys.D)) _velocity.X = 3f;
+            else _velocity.X = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _jumping == false)
             {
-                Position.Y -= 10f;
-                Velocity.Y = -5f;
+                _position.Y -= 10f;
+                _velocity.Y = -5f;
                 _jumping = true;
             }
 
             float i = 1;
-            Velocity.Y += 0.15f * i;
+            _velocity.Y += 0.15f * i;
         }
 
         #endregion
