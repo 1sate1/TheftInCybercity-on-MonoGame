@@ -23,10 +23,10 @@ namespace TheftInCybercity
 
         #region Methods
 
-        public Platform(Texture2D newTexture, Vector2 newPosition) 
+        public Platform(Texture2D texture, Vector2 position) 
         {
-            _texture = newTexture;
-            _position = newPosition;
+            _texture = texture;
+            _position = position;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, Rectangle, Color.White);

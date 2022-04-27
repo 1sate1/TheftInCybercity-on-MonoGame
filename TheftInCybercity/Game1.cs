@@ -20,7 +20,7 @@ namespace TheftInCybercity
 
         private Player _player;
 
-        private readonly List<Platform> _platforms = new();
+        public readonly List<Platform> _platforms = new();
 
         Stat Stat = Stat.Menu;
         private List<Component> _buttons;
@@ -46,9 +46,28 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            var animations = new Dictionary<string, Animation>()
+            {
+              { "runLeft", new Animation(Content.Load<Texture2D>("Player/runLeft"), 12) },
+              { "runRight", new Animation(Content.Load<Texture2D>("Player/runRight"), 12) },
+              { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
+              { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
+              { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
+            };
+
             #region Player
 
-            _player = new Player(Content.Load<Texture2D>("Player/staying/staying1"), new Vector2(300, 500 - 175));
+            _player = new Player(new Dictionary<string, Animation>()
+            {
+              { "runLeft", new Animation(Content.Load<Texture2D>("Player/runLeft"), 12) },
+              { "runRight", new Animation(Content.Load<Texture2D>("Player/runRight"), 12) },
+              { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
+              { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
+              { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
+            })
+            {
+                Position = new Vector2(450, 450),
+            };
 
             #endregion
 
@@ -107,14 +126,13 @@ namespace TheftInCybercity
                     break;
                 case Stat.Game:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
-
                     foreach (var _platform in _platforms)
                         if (_player.Rectangle.Intersects(_platform.Rectangle))
                         {
-                            _player._velocity.Y = 0f;
-                            _player._jumping = false;
+                        _player._velocity.Y = 0f;
+                        _player._hasJumped = false;
                         }
-                    _player.Update(gameTime);                                 
+                    _player.Update(gameTime);
                     break;
                 case Stat.Dead:
                     Exit();
@@ -126,7 +144,7 @@ namespace TheftInCybercity
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.MintCream);
             spriteBatch.Begin();
 
             switch (Stat)

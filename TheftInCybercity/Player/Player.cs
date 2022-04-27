@@ -11,28 +11,72 @@ namespace TheftInCybercity
 
         protected Texture2D _texture;
         protected Vector2 _position;
-        public Vector2 _velocity;            
-        public bool _jumping;
+        public Vector2 _velocity;
+        public bool _hasJumped;
+
+        protected AnimationManager _animationManager;
+        protected Dictionary<string, Animation> _animations;
 
         #endregion
 
         #region Properties
 
-        public Rectangle Rectangle { get { return new Rectangle((int)_position.X, (int)_position.Y, _texture.Width, _texture.Height); } }
+        public Rectangle Rectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, 88, 95); } }
+
+        public Vector2 Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+
+                if (_animationManager != null)
+                    _animationManager.Position = _position;
+            }
+        }
+
+        public Vector2 Velocity
+        {
+            get { return _velocity; }
+        }
 
         #endregion
 
         #region Methods
 
-        public Player(Texture2D newTexture, Vector2 newPosition)
+        public Player(Dictionary<string, Animation> animations)
         {
-            _texture = newTexture;
-            _position = newPosition;
+            _animations = animations;
+            _animationManager = new AnimationManager(_animations.First().Value);
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) => spriteBatch.Draw(_texture, _position, Color.White);
+        public Player(Texture2D texture)
+        {
+            _texture = texture;
+            _hasJumped = true;
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (_texture != null)
+                spriteBatch.Draw(_texture, Position, Color.White);
+            else if (_animationManager != null)
+                _animationManager.Draw(spriteBatch);
+            else throw new Exception("This ain't right..!");
+        }
 
         public override void Update(GameTime gameTime)
+        {
+            Move();
+
+            SetAnimations();
+            _animationManager.Update(gameTime);
+
+            Position += Velocity;
+            _velocity = Vector2.Zero;
+        }
+
+        private void Move()
         {
             _position += _velocity;
 
@@ -40,15 +84,36 @@ namespace TheftInCybercity
             else if (Keyboard.GetState().IsKeyDown(Keys.D)) _velocity.X = 3f;
             else _velocity.X = 0f;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W) && _jumping == false)
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
             {
-                _position.Y -= 10f;
-                _velocity.Y = -5f;
-                _jumping = true;
+                _position.Y -= 150f;
+                _velocity.Y = -10f;
+                _hasJumped = true;
             }
 
-            float i = 1;
-            _velocity.Y += 0.15f * i;
+            if (_hasJumped == true)
+            {
+                float i = 1;
+                _velocity.Y += 5f * i;
+            }
+
+            if (_hasJumped == false)
+                _velocity.Y += 0f;
+        }
+
+        protected virtual void SetAnimations()
+        {
+            if (Velocity.X > 0 && Velocity.Y == 0)
+                _animationManager.Play(_animations["runRight"]);
+            else if (Velocity.X < 0 && Velocity.Y == 0)
+                _animationManager.Play(_animations["runLeft"]);
+            else if (Velocity.X == 0 && Velocity.Y == 0)
+                _animationManager.Play(_animations["idle"]);
+            else if (Velocity.Y < 0 && Velocity.X == 0)
+                _animationManager.Play(_animations["jump"]);
+            else if (Velocity.Y > 0 && Velocity.X == 0)
+                _animationManager.Play(_animations["fall"]);
+            else _animationManager.Stop();
         }
 
         #endregion
