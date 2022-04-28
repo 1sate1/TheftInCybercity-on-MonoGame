@@ -163,7 +163,7 @@ namespace TheftInCybercity
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
                     foreach (var _platform in _platforms)
-                        if (_player.Rectangle.Intersects(_platform.Rectangle))
+                        if (_player.CollisionBox.Intersects(_platform.CollisionBox))
                         {
                         _player._velocity.Y = 0f;
                         _player._hasJumped = false;
