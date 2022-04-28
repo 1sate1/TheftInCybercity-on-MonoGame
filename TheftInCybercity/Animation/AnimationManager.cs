@@ -5,16 +5,21 @@ namespace TheftInCybercity
 {
     public class AnimationManager
     {
+        #region Fields
+
         public Animation _animation;
-
         private float _timer;
-
         public Vector2 Position;
 
-        public AnimationManager(Animation animation)
-        {
-            _animation = animation;
-        }
+        #endregion
+
+        #region Properties
+
+        public AnimationManager(Animation animation) { _animation = animation; }
+
+        #endregion
+
+        #region Methods
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -31,18 +36,14 @@ namespace TheftInCybercity
         {
             if (_animation == animation)
                 return;
-
             _animation = animation;
-
             _animation.CurrentFrame = 0;
-
             _timer = 0;
         }
 
         public void Stop()
         {
             _timer = 0f;
-
             _animation.CurrentFrame = 0;
         }
 
@@ -53,12 +54,12 @@ namespace TheftInCybercity
             if (_timer > _animation.FrameSpeed)
             {
                 _timer = 0f;
-
                 _animation.CurrentFrame++;
-
                 if (_animation.CurrentFrame >= _animation.FrameCount)
                     _animation.CurrentFrame = 0;
             }
         }
+
+        #endregion
     }
 }

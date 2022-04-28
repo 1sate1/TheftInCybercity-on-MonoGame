@@ -18,10 +18,9 @@ namespace TheftInCybercity
         readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+        private List<Sprite> _headers;
+        private List<Sprite> _sprites;
         private Player _player;
-
-        private readonly List<Sprite> _platforms = new();
-        private readonly List<Sprite> _headers = new();
 
         Stat Stat = Stat.Menu;
         private List<Component> _menuButtons;
@@ -47,13 +46,6 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region Headers
-
-            _headers.Add(new Sprite(Content.Load<Texture2D>("Controls/logo"), new Vector2(242, 26)));
-            _headers.Add(new Sprite(Content.Load<Texture2D>("Controls/pause"), new Vector2(368, 100)));
-
-            #endregion
-
             #region Animations
 
             var animations = new Dictionary<string, Animation>()
@@ -67,29 +59,35 @@ namespace TheftInCybercity
 
             #endregion
 
-            #region Player
+            #region Sprites
 
-            _player = new Player(new Dictionary<string, Animation>()
+            _headers = new List<Sprite>()
             {
-              { "runLeft", new Animation(Content.Load<Texture2D>("Player/runLeft"), 12) },
-              { "runRight", new Animation(Content.Load<Texture2D>("Player/runRight"), 12) },
-              { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
-              { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
-              { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
-            })
+                new Sprite(Content.Load<Texture2D>("Controls/logo"), new Vector2(242, 26)),
+                new Sprite(Content.Load<Texture2D>("Controls/pause"), new Vector2(368, 100)),
+            };
+
+            _sprites = new List<Sprite>()
             {
-                Position = new Vector2(300 - 20, 500 - 127),
+                new Player(new Dictionary<string, Animation>()
+                {
+                    { "runLeft", new Animation(Content.Load<Texture2D>("Player/runLeft"), 12) },
+                    { "runRight", new Animation(Content.Load<Texture2D>("Player/runRight"), 12) },
+                    { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
+                    { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
+                    { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
+                })
+                {
+                    Position = new Vector2(300 - 20, 500 - 127),
+                },               
+                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(300, 500)),
+                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(600, 400)),
+                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(900, 500)),                
             };
 
             #endregion
 
-            #region Platforms
-
-            _platforms.Add(new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(300, 500)));
-            _platforms.Add(new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(600, 400)));
-            _platforms.Add(new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(900, 500)));
-
-            #endregion
+            #region Buttons
 
             #region MenuButtons
 
@@ -101,8 +99,8 @@ namespace TheftInCybercity
 
             _menuButtons = new List<Component>()
             {
-              playGameButton,
-              quitGameButton,
+                playGameButton,
+                quitGameButton,
             };
 
             #endregion
@@ -117,9 +115,11 @@ namespace TheftInCybercity
 
             _pauseButtons = new List<Component>()
             {
-              resumeButton,
-              quitButton,
+                resumeButton,
+                quitButton,
             };
+
+            #endregion
 
             #endregion
 
@@ -139,12 +139,14 @@ namespace TheftInCybercity
 
         #endregion
 
-     protected override void UnloadContent() { }
+        protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {
             if (Stat == Stat.Game) IsMouseVisible = false;
             else IsMouseVisible = true;
+
+            _player = (Player)_sprites[0];
 
             if (_player._hasDead == true)
                 Stat = Stat.Dead;
@@ -155,22 +157,24 @@ namespace TheftInCybercity
                     foreach (var button in _menuButtons)
                         button.Update(gameTime);
                     break;
+
                 case Stat.Pause:
                     foreach (var button in _pauseButtons)
                         button.Update(gameTime);
                     break;
+
                 case Stat.Game:                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
-                    foreach (var _platform in _platforms)
+                    foreach (var _platform in _sprites.Skip(1))
                         if (_player.CollisionBox.Intersects(_platform.CollisionBox))
                         {
-                        _player._velocity.Y = 0f;
-                        _player._hasJumped = false;
+                            _player._velocity.Y = 0f;
+                            _player._hasJumped = false;
                         }
-
                     _player.Update(gameTime);
                     break;
+
                 case Stat.Dead:
                     Exit();
                     break;
@@ -191,12 +195,13 @@ namespace TheftInCybercity
                     foreach (var component in _menuButtons)
                         component.Draw(gameTime, spriteBatch);
                     break;
-                case Stat.Game:
-                    foreach (var _platform in _platforms)
-                        _platform.Draw(gameTime, spriteBatch);
 
+                case Stat.Game:
+                    foreach (var _platform in _sprites.Skip(1))
+                        _platform.Draw(gameTime, spriteBatch);
                     _player.Draw(gameTime, spriteBatch);
                     break;
+
                 case Stat.Pause:
                     _headers[1].Draw(gameTime, spriteBatch);
                     foreach (var component in _pauseButtons)

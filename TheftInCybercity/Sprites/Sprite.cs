@@ -64,9 +64,7 @@ namespace TheftInCybercity
             else throw new Exception("This ain't right..!");
         }
 
-        public override void Update(GameTime gameTime)
-        {            
-        }
+        public override void Update(GameTime gameTime) { }
 
         #endregion
     }

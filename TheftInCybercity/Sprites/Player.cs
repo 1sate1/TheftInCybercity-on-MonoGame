@@ -32,7 +32,8 @@ namespace TheftInCybercity
                 spriteBatch.Draw(_texture, Position, Color.White);
             else if (_animationManager != null)
                 _animationManager.Draw(spriteBatch);
-            else throw new Exception("This ain't right..!");
+            else 
+                throw new Exception("This ain't right..!");
         }
 
         public override void Update(GameTime gameTime)
