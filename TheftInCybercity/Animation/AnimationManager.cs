@@ -5,11 +5,11 @@ namespace TheftInCybercity
 {
     public class AnimationManager
     {
-        private Animation _animation;
+        public Animation _animation;
 
         private float _timer;
 
-        public Vector2 Position { get; set; }
+        public Vector2 Position;
 
         public AnimationManager(Animation animation)
         {

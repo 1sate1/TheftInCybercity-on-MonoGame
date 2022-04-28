@@ -35,10 +35,7 @@ namespace TheftInCybercity
             }
         }
 
-        public Vector2 Velocity
-        {
-            get { return _velocity; }
-        }
+        public Vector2 Velocity { get { return _velocity; } }
 
         #endregion
 

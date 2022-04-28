@@ -158,12 +158,14 @@ namespace TheftInCybercity
                     break;
                 case Stat.Game:                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
+
                     foreach (var _platform in _platforms)
                         if (_player.Rectangle.Intersects(_platform.Rectangle))
                         {
                         _player._velocity.Y = 0f;
                         _player._hasJumped = false;
                         }
+
                     _player.Update(gameTime);
                     break;
                 case Stat.Dead:
@@ -189,6 +191,7 @@ namespace TheftInCybercity
                 case Stat.Game:
                     foreach (var _platform in _platforms)
                         _platform.Draw(gameTime, spriteBatch);
+
                     _player.Draw(gameTime, spriteBatch);
                     break;
                 case Stat.Pause:

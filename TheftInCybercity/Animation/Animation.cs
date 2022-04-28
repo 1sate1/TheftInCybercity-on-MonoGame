@@ -4,19 +4,19 @@ namespace TheftInCybercity
 {
     public class Animation
     {
-        public int CurrentFrame { get; set; }
+        #region Properties
 
+        public int CurrentFrame;
         public int FrameCount { get; private set; }
-
         public int FrameHeight { get { return Texture.Height; } }
-
-        public float FrameSpeed { get; set; }
-
+        public float FrameSpeed;
         public int FrameWidth { get { return Texture.Width / FrameCount; } }
-
-        public bool IsLooping { get; set; }
-
+        public bool IsLooping;
         public Texture2D Texture { get; private set; }
+
+        #endregion
+
+        #region Methods
 
         public Animation(Texture2D texture, int frameCount)
         {
@@ -28,5 +28,7 @@ namespace TheftInCybercity
 
             FrameSpeed = 0.05f;
         }
+
+        #endregion
     }
 }
