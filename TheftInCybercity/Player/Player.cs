@@ -13,6 +13,7 @@ namespace TheftInCybercity
         protected Vector2 _position;
         public Vector2 _velocity;
         public bool _hasJumped;
+        public bool _hasDead;
 
         protected AnimationManager _animationManager;
         protected Dictionary<string, Animation> _animations;
@@ -51,6 +52,7 @@ namespace TheftInCybercity
         {
             _texture = texture;
             _hasJumped = true;
+            _hasDead = false;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -68,6 +70,9 @@ namespace TheftInCybercity
 
             SetAnimations();
             _animationManager.Update(gameTime);
+
+            if (Position.Y >= 900)
+                _hasDead = true;
 
             Position += Velocity;
             _velocity = Vector2.Zero;

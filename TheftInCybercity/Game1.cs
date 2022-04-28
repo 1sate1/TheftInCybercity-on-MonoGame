@@ -146,6 +146,9 @@ namespace TheftInCybercity
             if (Stat == Stat.Game) IsMouseVisible = false;
             else IsMouseVisible = true;
 
+            if (_player._hasDead == true)
+                Stat = Stat.Dead;
+
             switch (Stat)
             {
                 case Stat.Menu:
