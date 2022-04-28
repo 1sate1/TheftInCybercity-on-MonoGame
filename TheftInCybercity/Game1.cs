@@ -78,7 +78,7 @@ namespace TheftInCybercity
               { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
             })
             {
-                Position = new Vector2(450, 450),
+                Position = new Vector2(300 - 20, 500 - 127),
             };
 
             #endregion
@@ -139,7 +139,7 @@ namespace TheftInCybercity
 
         #endregion
 
-        protected override void UnloadContent() { }
+     protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {

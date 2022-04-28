@@ -21,7 +21,7 @@ namespace TheftInCybercity
 
         #region Properties
 
-        public Rectangle Rectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, 88, 95); } }
+        public Rectangle Rectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, _animations.First().Value.FrameWidth, _animations.First().Value.FrameHeight); } }
 
         public Vector2 Position
         {
@@ -75,8 +75,6 @@ namespace TheftInCybercity
 
         private void Move()
         {
-            _position += _velocity;
-
             if (Keyboard.GetState().IsKeyDown(Keys.A)) _velocity.X = -3f;
             else if (Keyboard.GetState().IsKeyDown(Keys.D)) _velocity.X = 3f;
             else _velocity.X = 0f;
@@ -84,7 +82,7 @@ namespace TheftInCybercity
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
             {
                 _position.Y -= 150f;
-                _velocity.Y = -10f;
+                _velocity.Y -= 10f;
                 _hasJumped = true;
             }
 
