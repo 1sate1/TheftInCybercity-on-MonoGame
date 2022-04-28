@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace TheftInCybercity
 {
 #nullable disable
-    public class Platform : Component
+    public class Sprite : Component
     {
         #region Fields
 
@@ -23,7 +23,7 @@ namespace TheftInCybercity
 
         #region Methods
 
-        public Platform(Texture2D texture, Vector2 position) 
+        public Sprite(Texture2D texture, Vector2 position) 
         {
             _texture = texture;
             _position = position;
