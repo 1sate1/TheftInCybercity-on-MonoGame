@@ -9,6 +9,7 @@ namespace TheftInCybercity
     {
         #region Fields
 
+        protected bool _onGround;
         public bool _hasJumped;
         public bool _hasDead;
 
@@ -16,15 +17,9 @@ namespace TheftInCybercity
 
         #region Methods
 
-        public Player(Dictionary<string, Animation> animations) : base(animations)
-        {           
-        }
+        public Player(Texture2D texture, Vector2 position, CollisionTypes collisionType) : base(texture, position, collisionType) { _hasDead = false; }
 
-        public Player(Texture2D texture, Vector2 position) : base(texture, position)
-        {
-            _hasJumped = true;
-            _hasDead = false;
-        }
+        public Player(Dictionary<string, Animation> animations) : base(animations) { }       
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -45,9 +40,6 @@ namespace TheftInCybercity
 
             if (Position.Y >= 900)
                 _hasDead = true;
-
-            Position += Velocity;
-            _velocity = Vector2.Zero;
         }
 
         protected void Move()
@@ -57,20 +49,41 @@ namespace TheftInCybercity
             else _velocity.X = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
-            {
-                _position.Y -= 150f;
-                _velocity.Y -= 10f;
                 _hasJumped = true;
-            }
+        }
 
-            if (_hasJumped == true)
+        public override void OnCollide(Sprite sprite)
+        {
+            var onTop = this.WillIntersectTop(sprite);
+            var onLeft = this.WillIntersectLeft(sprite);
+            var onRight = this.WillIntersectRight(sprite);
+            var onBotton = this.WillIntersectBottom(sprite);
+
+            if (onTop)
             {
-                float i = 1;
-                _velocity.Y += 5f * i;
+                _onGround = true;
+                _velocity.Y = sprite.CollisionBox.Top - this.CollisionBox.Bottom;
             }
+            else if (onLeft && _velocity.X > 0)
+                _velocity.X = 0;
+            else if (onRight && _velocity.X < 0)
+                _velocity.X = 0;
+            else if (onBotton)
+                _velocity.Y = 1;
+        }
 
-            if (_hasJumped == false)
-                _velocity.Y += 0f;
+        public override void ApplyPhysics(GameTime gameTime)
+        {
+            if (!_onGround)
+                _velocity.Y += 0.3f;
+
+            if (_onGround && _hasJumped)
+                _velocity.Y = -10f;
+
+            _onGround = false;
+            _hasJumped = false;
+
+            Position += _velocity;
         }
 
         protected virtual void SetAnimations()

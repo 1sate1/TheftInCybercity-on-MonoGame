@@ -63,9 +63,11 @@ namespace TheftInCybercity
 
             _headers = new List<Sprite>()
             {
-                new Sprite(Content.Load<Texture2D>("Controls/logo"), new Vector2(242, 26)),
-                new Sprite(Content.Load<Texture2D>("Controls/pause"), new Vector2(368, 100)),
+                new Sprite(Content.Load<Texture2D>("Controls/logo"), new Vector2(800, 250), CollisionTypes.None),
+                new Sprite(Content.Load<Texture2D>("Controls/pause"), new Vector2(800, 250), CollisionTypes.None),
             };
+
+            var platformTexture = Content.Load<Texture2D>("Platform/platform");
 
             _sprites = new List<Sprite>()
             {
@@ -76,13 +78,11 @@ namespace TheftInCybercity
                     { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
                     { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
                     { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
-                })
-                {
-                    Position = new Vector2(300 - 20, 500 - 127),
-                },               
-                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(300, 500)),
-                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(600, 400)),
-                new Sprite(Content.Load<Texture2D>("Platform/platform"), new Vector2(900, 500)),                
+                }) { Position = new Vector2(120, 500-47), CollisionType = CollisionTypes.Full },
+                new Sprite(platformTexture, new Vector2(300, 600), CollisionTypes.Full), 
+                new Sprite(platformTexture, new Vector2(700, 450), CollisionTypes.Full),
+                new Sprite(platformTexture, new Vector2(1200, 300), CollisionTypes.Full),
+                new Sprite(platformTexture, new Vector2(1200, 700), CollisionTypes.Full),          
             };
 
             #endregion
@@ -166,13 +166,11 @@ namespace TheftInCybercity
                 case Stat.Game:                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
-                    foreach (var _platform in _sprites.Skip(1))
-                        if (_player.CollisionBox.Intersects(_platform.CollisionBox))
-                        {
-                            _player._velocity.Y = 0f;
-                            _player._hasJumped = false;
-                        }
-                    _player.Update(gameTime);
+                    foreach (var sprite in _sprites)
+                        sprite.Update(gameTime);
+                    CheckCollision(gameTime);
+                    foreach (var sprite in _sprites)
+                        sprite.ApplyPhysics(gameTime);
                     break;
 
                 case Stat.Dead:
@@ -192,25 +190,41 @@ namespace TheftInCybercity
             {
                 case Stat.Menu:
                     _headers[0].Draw(gameTime, spriteBatch);
-                    foreach (var component in _menuButtons)
-                        component.Draw(gameTime, spriteBatch);
+                    foreach (var buttons in _menuButtons)
+                        buttons.Draw(gameTime, spriteBatch);
                     break;
 
                 case Stat.Game:
-                    foreach (var _platform in _sprites.Skip(1))
-                        _platform.Draw(gameTime, spriteBatch);
-                    _player.Draw(gameTime, spriteBatch);
+                    foreach (var sprite in _sprites)
+                        sprite.Draw(gameTime, spriteBatch);
                     break;
 
                 case Stat.Pause:
                     _headers[1].Draw(gameTime, spriteBatch);
-                    foreach (var component in _pauseButtons)
-                        component.Draw(gameTime, spriteBatch);
+                    foreach (var buttons in _pauseButtons)
+                        buttons.Draw(gameTime, spriteBatch);
                     break;
             }
 
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public void CheckCollision(GameTime gameTime)
+        {
+            var collidableSprites = _sprites.Where(c => c.CollisionType != CollisionTypes.None);
+
+            foreach (var spriteA in collidableSprites)
+            {
+                foreach (var spriteB in collidableSprites)
+                {
+                    if (spriteA == spriteB)
+                        continue;
+
+                    if (spriteA.WillIntersect(spriteB))
+                        spriteA.OnCollide(spriteB);
+                }
+            }
         }
     }
 }
