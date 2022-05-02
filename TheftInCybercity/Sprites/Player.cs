@@ -44,9 +44,12 @@ namespace TheftInCybercity
 
         protected void Move()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) _velocity.X = -3f;
-            else if (Keyboard.GetState().IsKeyDown(Keys.D)) _velocity.X = 3f;
-            else _velocity.X = 0f;
+            if (Keyboard.GetState().IsKeyDown(Keys.A))            
+                _velocity.X = -3f;
+            else if (Keyboard.GetState().IsKeyDown(Keys.D))            
+                _velocity.X = 3f;           
+            else 
+                _velocity.X = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
                 _hasJumped = true;

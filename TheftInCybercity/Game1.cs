@@ -167,10 +167,13 @@ namespace TheftInCybercity
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
                     foreach (var sprite in _sprites)
+                    {
                         sprite.Update(gameTime);
-                    CheckCollision(gameTime);
-                    foreach (var sprite in _sprites)
                         sprite.ApplyPhysics(gameTime);
+                    }
+                        
+                    CheckCollision(gameTime);
+                        
                     break;
 
                 case Stat.Dead:

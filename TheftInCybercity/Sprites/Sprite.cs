@@ -71,7 +71,7 @@ namespace TheftInCybercity
         public Sprite(Dictionary<string, Animation> animations)
         {
             _animations = animations;
-            _animationManager = new AnimationManager(_animations.First().Value);
+            _animationManager = new AnimationManager(_animations.First().Value);            
         }
 
         public Sprite(Texture2D texture, Vector2 position, CollisionTypes collisionType)
@@ -110,32 +110,32 @@ namespace TheftInCybercity
         {
             return this.CollisionBox.Right + this._velocity.X >= sprite.CollisionBox.Left &&
               this.CollisionBox.Left + this._velocity.X < sprite.CollisionBox.Left &&
-              this.CollisionBox.Top   /*+ this._velocity.Y */< sprite.CollisionBox.Bottom &&
-              this.CollisionBox.Bottom/* + this._velocity.Y*/ > sprite.CollisionBox.Top;
+              this.CollisionBox.Top < sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Bottom > sprite.CollisionBox.Top;
         }
 
         public bool WillIntersectRight(Sprite sprite)
         {
             return this.CollisionBox.Left + this._velocity.X <= sprite.CollisionBox.Right &&
               this.CollisionBox.Right > sprite.CollisionBox.Right &&
-              this.CollisionBox.Top   /*+ this._velocity.Y */< sprite.CollisionBox.Bottom &&
-              this.CollisionBox.Bottom/* + this._velocity.Y*/ > sprite.CollisionBox.Top;
+              this.CollisionBox.Top < sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Bottom > sprite.CollisionBox.Top;
         }
 
         public bool WillIntersectTop(Sprite sprite)
         {
             return this.CollisionBox.Bottom + this._velocity.Y >= sprite.CollisionBox.Top &&
               this.CollisionBox.Top < sprite.CollisionBox.Top &&
-              this.CollisionBox.Right/* + this._velocity.X*/ > sprite.CollisionBox.Left &&
-              this.CollisionBox.Left /*+ this._velocity.Y */< sprite.CollisionBox.Right;
+              this.CollisionBox.Right > sprite.CollisionBox.Left &&
+              this.CollisionBox.Left < sprite.CollisionBox.Right;
         }
 
         public bool WillIntersectBottom(Sprite sprite)
         {
             return this.CollisionBox.Top + this._velocity.Y <= sprite.CollisionBox.Bottom &&
               this.CollisionBox.Bottom > sprite.CollisionBox.Bottom &&
-              this.CollisionBox.Right/* + this._velocity.X*/ > sprite.CollisionBox.Left &&
-              this.CollisionBox.Left /*+ this._velocity.Y */< sprite.CollisionBox.Right;
+              this.CollisionBox.Right > sprite.CollisionBox.Left &&
+              this.CollisionBox.Left < sprite.CollisionBox.Right;
         }
 
         #endregion
