@@ -38,7 +38,7 @@ namespace TheftInCybercity
             graphics.PreferredBackBufferWidth = 1600;
             graphics.PreferredBackBufferHeight = 900;
             graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            graphics.ApplyChanges();           
             base.Initialize();
         }
 
@@ -55,6 +55,9 @@ namespace TheftInCybercity
               { "jump", new Animation(Content.Load<Texture2D>("Player/jump"), 1) },
               { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
               { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
+              { "idlePig", new Animation(Content.Load<Texture2D>("Enemies/pig/Idle (34x28)"), 11) },
+              { "fallPig", new Animation(Content.Load<Texture2D>("Enemies/pig/Fall (34x28)"), 1) },
+              { "runPig", new Animation(Content.Load<Texture2D>("Enemies/pig/Run (34x28)"), 6) },
             };
 
             #endregion
@@ -79,6 +82,12 @@ namespace TheftInCybercity
                     { "fall", new Animation(Content.Load<Texture2D>("Player/fall"), 1) },
                     { "idle", new Animation(Content.Load<Texture2D>("Player/idle"), 11) },
                 }) { Position = new Vector2(120, 500-47), CollisionType = CollisionTypes.Full },
+                new Enemy(new Dictionary<string, Animation>()
+                {
+                    { "idlePig", new Animation(Content.Load<Texture2D>("Enemies/pig/Idle (34x28)"), 11) },
+                    { "fallPig", new Animation(Content.Load<Texture2D>("Enemies/pig/Fall (34x28)"), 1) },
+                    { "runPig", new Animation(Content.Load<Texture2D>("Enemies/pig/Run (34x28)"), 6) },
+                }) { Position = new Vector2(600, 450-165), CollisionType = CollisionTypes.Full },
                 new Sprite(platformTexture, new Vector2(300, 600), CollisionTypes.Full), 
                 new Sprite(platformTexture, new Vector2(700, 450), CollisionTypes.Full),
                 new Sprite(platformTexture, new Vector2(1200, 300), CollisionTypes.Full),

@@ -91,15 +91,15 @@ namespace TheftInCybercity
 
         protected virtual void SetAnimations()
         {
-            if (Velocity.X > 0 && Velocity.Y == 0)
+            if (_velocity.X > 0 && _velocity.Y == 0)
                 _animationManager.Play(_animations["runRight"]);
-            else if (Velocity.X < 0 && Velocity.Y == 0)
+            else if (_velocity.X < 0 && _velocity.Y == 0)
                 _animationManager.Play(_animations["runLeft"]);
-            else if (Velocity.X == 0 && Velocity.Y == 0)
+            else if (_velocity.X == 0 && _velocity.Y == 0)
                 _animationManager.Play(_animations["idle"]);
-            else if (Velocity.Y < 0 && Velocity.X == 0)
+            else if (_velocity.Y < 0 && _velocity.X == 0)
                 _animationManager.Play(_animations["jump"]);
-            else if (Velocity.Y > 0 && Velocity.X == 0)
+            else if (_velocity.Y > 0 && _velocity.X == 0)
                 _animationManager.Play(_animations["fall"]);
             else _animationManager.Stop();
         }
