@@ -54,7 +54,7 @@ namespace TheftInCybercity
             get
             {
                 if (_animations != null)
-                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _animations.First().Value.FrameWidth, _animations.First().Value.FrameHeight);
+                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _animationManager.ACollision.Width, _animationManager.ACollision.Height);
                 else
                     return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _texture.Width, _texture.Height);
             }

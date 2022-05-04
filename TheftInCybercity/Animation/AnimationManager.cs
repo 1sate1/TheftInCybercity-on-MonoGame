@@ -17,6 +17,17 @@ namespace TheftInCybercity
 
         public AnimationManager(Animation animation) { _animation = animation; }
 
+        public Rectangle ACollision
+        {
+            get 
+            {
+                return new Rectangle(_animation.CurrentFrame * _animation.FrameWidth,
+                                           0,
+                                           _animation.FrameWidth,
+                                           _animation.FrameHeight);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -25,10 +36,7 @@ namespace TheftInCybercity
         {
             spriteBatch.Draw(_animation.Texture,
                              Position,
-                             new Rectangle(_animation.CurrentFrame * _animation.FrameWidth,
-                                           0,
-                                           _animation.FrameWidth,
-                                           _animation.FrameHeight),
+                             ACollision,
                              Color.White);
         }
 
