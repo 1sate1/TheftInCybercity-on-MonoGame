@@ -19,7 +19,7 @@ namespace TheftInCybercity
 
         public Player(Texture2D texture, Vector2 position, CollisionTypes collisionType) : base(texture, position, collisionType) { _hasDead = false; }
 
-        public Player(Dictionary<string, Animation> animations) : base(animations) { }       
+        public Player(Dictionary<string, Animation> animations) : base(animations) { }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

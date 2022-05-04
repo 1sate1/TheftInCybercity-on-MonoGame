@@ -10,7 +10,7 @@ namespace TheftInCybercity
         public Enemy(Texture2D texture, Vector2 position, CollisionTypes collisionType) : base(texture, position, collisionType) { }
 
         public Enemy(Dictionary<string, Animation> animations) : base(animations) { }
-
+       
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (_texture != null)

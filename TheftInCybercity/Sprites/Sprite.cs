@@ -54,13 +54,11 @@ namespace TheftInCybercity
             get
             {
                 if (_animations != null)
-                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _animationManager.ACollision.Width, _animationManager.ACollision.Height);
+                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _animationManager._animation.FrameWidth, _animationManager._animation.FrameHeight);
                 else
                     return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _texture.Width, _texture.Height);
             }
         }
-
-        public Vector2 Centre { get { return new Vector2(CollisionBox.X + Origin.X, CollisionBox.Y + Origin.Y); } }
 
         public float Rotation { get { return _rotation; } set { _rotation = value; } }
 
@@ -71,7 +69,7 @@ namespace TheftInCybercity
         public Sprite(Dictionary<string, Animation> animations)
         {
             _animations = animations;
-            _animationManager = new AnimationManager(_animations.First().Value);            
+            _animationManager = new AnimationManager(_animations.First().Value);
         }
 
         public Sprite(Texture2D texture, Vector2 position, CollisionTypes collisionType)
