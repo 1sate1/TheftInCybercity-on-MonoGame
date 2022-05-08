@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Sprites;
 
 namespace TheftInCybercity
 {
 #nullable disable
-    public class Player : Sprite
+    public class Player : Entity
     {
         #region Fields
 
@@ -17,18 +19,10 @@ namespace TheftInCybercity
 
         #region Methods
 
-        public Player(Texture2D texture, Vector2 position, CollisionTypes collisionType) : base(texture, position, collisionType) { _hasDead = false; }
-
-        public Player(Dictionary<string, Animation> animations) : base(animations) { }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public Player(AnimatedSprite sprite, Vector2 position, CollisionTypes collisionType) : base(sprite, position, collisionType)
         {
-            if (_texture != null)
-                spriteBatch.Draw(_texture, Position, Color.White);
-            else if (_animationManager != null)
-                _animationManager.Draw(spriteBatch);
-            else 
-                throw new Exception("This ain't right..!");
+            sprite.Play("idle");
+            _hasDead = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -36,12 +30,12 @@ namespace TheftInCybercity
             Move();
 
             SetAnimations();
-            _animationManager.Update(gameTime);
-
-            if (Position.Y >= 900)
-                _hasDead = true;
+            _entity.Update(gameTime);
         }
 
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) =>
+            spriteBatch.Draw(_entity, Position);
+       
         protected void Move()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.A))            
@@ -81,7 +75,10 @@ namespace TheftInCybercity
                 _velocity.Y += 0.3f;
 
             if (_onGround && _hasJumped)
-                _velocity.Y = -10f;
+                _velocity.Y = -11f;
+
+            if (Position.Y >= 900)
+                _hasDead = true;
 
             _onGround = false;
             _hasJumped = false;
@@ -89,19 +86,22 @@ namespace TheftInCybercity
             Position += _velocity;
         }
 
-        protected virtual void SetAnimations()
+        protected void SetAnimations()
         {
+            var animation = "idle";
+
             if (_velocity.X > 0 && _velocity.Y == 0)
-                _animationManager.Play(_animations["runRight"]);
+                animation = "runRight";
             else if (_velocity.X < 0 && _velocity.Y == 0)
-                _animationManager.Play(_animations["runLeft"]);
+                animation = "runLeft";
             else if (_velocity.X == 0 && _velocity.Y == 0)
-                _animationManager.Play(_animations["idle"]);
-            else if (_velocity.Y < 0 && _velocity.X == 0)
-                _animationManager.Play(_animations["jump"]);
-            else if (_velocity.Y > 0 && _velocity.X == 0)
-                _animationManager.Play(_animations["fall"]);
-            else _animationManager.Stop();
+                animation = "idle";
+            else if (_velocity.Y < 0)
+                animation = "jump";
+            else if (_velocity.Y > 0)
+                animation = "fall";
+
+            _entity.Play(animation);
         }
 
         #endregion

@@ -1,0 +1,24 @@
+{
+  "textureAtlas": {
+    "texture": "player128.png",
+    "regionWidth": 128,
+    "regionHeight": 128
+  },
+  "cycles": {
+    "runRight": {
+      "frames": [0,1,2,3,4,5,6,7,8,9,10,11]
+    },
+    "jump": {
+      "frames": [12]
+    },
+    "idle": {
+      "frames": [25,26,27,28,29,30,31,32,33,34,35]
+    },
+    "fall": {
+      "frames": [36]
+    },
+    "runLeft": {
+      "frames": [48,49,50,51,52,53,54,55,56,57,58,59]
+    }
+  }
+}

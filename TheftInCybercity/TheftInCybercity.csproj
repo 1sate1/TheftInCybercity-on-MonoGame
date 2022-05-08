@@ -8,14 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Content\Enemies\" />
     <Folder Include="Content\Enemies\pig\" />
-    <Folder Include="Content\Player\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
+    <PackageReference Include="MonoGame.Extended.Animations" Version="3.7.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\Player\player128.sf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

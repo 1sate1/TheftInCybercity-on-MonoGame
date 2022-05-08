@@ -1,31 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Sprites;
 
 namespace TheftInCybercity
 {
-#nullable disable
-    public enum CollisionTypes
-    {
-        None,
-        Full,
-        Top,
-    }
-
-    public class Sprite : Component
+    public class Entity : Component
     {
         #region Fields
 
-        public Texture2D _texture;
         public Vector2 _position;
         public Vector2 _velocity;
         protected Vector2 _origin;
-        protected float _rotation;
-        protected float _layer;
         public CollisionTypes CollisionType;
-        public Color Colour;
 
-        protected AnimationManager _animationManager;
-        protected Dictionary<string, Animation> _animations;
+        public AnimatedSprite _entity;
 
         #endregion
 
@@ -35,62 +24,42 @@ namespace TheftInCybercity
 
         public Vector2 Origin { get { return _origin; } set { _origin = value; } }
 
-        public float Layer { get { return _layer; } set { _layer = value; } }
-       
         public Vector2 Position
         {
             get { return _position; }
-            set
-            {
-                _position = value;
-
-                if (_animationManager != null)
-                    _animationManager.Position = _position;
-            }
+            set { _position = value; }
         }
 
-        public Rectangle CollisionBox
+        public RectangleF CollisionBox
         {
             get
             {
-                if (_animations != null)
-                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _animationManager._animation.FrameWidth, _animationManager._animation.FrameHeight);
-                else
-                    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _texture.Width, _texture.Height);
+                return new RectangleF(Position.X - Origin.X, Position.Y - Origin.Y, 128, 128);
             }
         }
-
-        public float Rotation { get { return _rotation; } set { _rotation = value; } }
 
         #endregion
 
         #region Methods
 
-        public Sprite(Dictionary<string, Animation> animations)
+        public Entity(AnimatedSprite entity, Vector2 position, CollisionTypes collisionType)
         {
-            _animations = animations;
-            _animationManager = new AnimationManager(_animations.First().Value);
-        }
-
-        public Sprite(Texture2D texture, Vector2 position, CollisionTypes collisionType)
-        {
-            _texture = texture;
+            _entity = entity;
             _position = position;
             CollisionType = collisionType;
-            Origin = new Vector2(_texture.Width / 2, _texture.Height / 2);           
-            Colour = Color.White;
+            Origin = new Vector2(_entity.TextureRegion.Width / 2, _entity.TextureRegion.Height / 2);
         }
 
         public override void Update(GameTime gameTime) { }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            if (_texture != null)
-                spriteBatch.Draw(_texture, Position, null, Colour, _rotation, Origin, 1f, SpriteEffects.None, Layer);
-            else if (_animationManager != null)
-                _animationManager.Draw(spriteBatch);
-            else throw new Exception("This ain't right..!");
-        }
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) =>
+            spriteBatch.Draw(_entity, Position);
+
+        public virtual void ApplyPhysics(GameTime gameTime) { }
+
+        #region Collision
+
+        public virtual void OnCollide(Sprite sprite) { }
 
         public bool WillIntersect(Sprite sprite)
         {
@@ -98,11 +67,7 @@ namespace TheftInCybercity
               this.WillIntersectLeft(sprite) ||
               this.WillIntersectRight(sprite) ||
               this.WillIntersectTop(sprite);
-        }        
-
-        #region Collision
-
-        public virtual void OnCollide(Sprite sprite) { }
+        }
 
         public bool WillIntersectLeft(Sprite sprite)
         {
@@ -137,8 +102,6 @@ namespace TheftInCybercity
         }
 
         #endregion
-
-        public virtual void ApplyPhysics(GameTime gameTime) { }
 
         #endregion
     }
