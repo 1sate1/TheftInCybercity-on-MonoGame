@@ -21,9 +21,8 @@ namespace TheftInCybercity
         readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
-        private List<Sprite> _headers;
-        private List<Entity> _entities;
-        private List<Sprite> _sprites;
+        private List<Object> _headers;
+        private List<Object> _sprites;
         private Player _player;
 
         Stat Stat = Stat.Menu;
@@ -50,29 +49,47 @@ namespace TheftInCybercity
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            #region Sprites
+            #region Objects
 
-            var platformTexture = Content.Load<Texture2D>("Platform/platform");
+            #region LoadObjects
 
-            _headers = new List<Sprite>()
+            var logo = Content.Load<Texture2D>("Controls/logo");
+            var pause = Content.Load<Texture2D>("Controls/pause");
+
+            var spawnC = Content.Load<Texture2D>("Objects/spawnC");
+            var spawnNC = Content.Load<Texture2D>("Objects/spawnNC");
+            var p1x1 = Content.Load<Texture2D>("Objects/1x1");
+            var p2x1 = Content.Load<Texture2D>("Objects/2x1");
+            var p3x1 = Content.Load<Texture2D>("Objects/3x1");
+            var p4x1 = Content.Load<Texture2D>("Objects/4x1");
+            var p5x1 = Content.Load<Texture2D>("Objects/5x1");
+            var p6x1 = Content.Load<Texture2D>("Objects/6x1");
+            var w1x2 = Content.Load<Texture2D>("Objects/1x2");
+            var w1x3 = Content.Load<Texture2D>("Objects/1x3");
+            var w1x4 = Content.Load<Texture2D>("Objects/1x4");
+            var w1x5 = Content.Load<Texture2D>("Objects/1x5");
+            var o2x2 = Content.Load<Texture2D>("Objects/2x2");
+
+            var player = new AnimatedSprite(Content.Load<SpriteSheet>("Player/player128.sf", new JsonContentLoader()));
+
+            #endregion
+
+            _headers = new List<Object>()
             {
-                new Sprite(Content.Load<Texture2D>("Controls/logo"), new Vector2(76, 20), CollisionTypes.None),
-                new Sprite(Content.Load<Texture2D>("Controls/pause"), new Vector2(202, 70), CollisionTypes.None),
+                new Object(logo, new Vector2(76, 20), CollisionTypes.None),
+                new Object(pause, new Vector2(202, 70), CollisionTypes.None),
             };
 
-            _sprites = new List<Sprite>()
+            _sprites = new List<Object>()
             {
-                new Sprite(platformTexture, new Vector2(0, 694), CollisionTypes.Full),
-                new Sprite(platformTexture, new Vector2(400, 594), CollisionTypes.Full),
-                new Sprite(platformTexture, new Vector2(750, 454), CollisionTypes.Full),
-                new Sprite(platformTexture, new Vector2(500, 270), CollisionTypes.Full),
-                new Sprite(platformTexture, new Vector2(0, 430), CollisionTypes.Full),
+                new Object(spawnNC, new Vector2(3, 527), CollisionTypes.None),
+                new Object(spawnC, new Vector2(0, 669), CollisionTypes.Full),
+                new Object(p5x1, new Vector2(300, 594), CollisionTypes.Full),
+                new Object(p3x1, new Vector2(700, 454), CollisionTypes.Full),
+                new Object(p5x1, new Vector2(300, 300), CollisionTypes.Full),
             };
 
-            _entities = new List<Entity>()
-            {
-                new Player(new AnimatedSprite(Content.Load<SpriteSheet>("Player/player128.sf", new JsonContentLoader())), new Vector2(45, 630), CollisionTypes.Full),
-            };
+            _player = new Player(player, new Vector2(45, 605), CollisionTypes.Full);
 
             #endregion
 
@@ -135,8 +152,6 @@ namespace TheftInCybercity
             if (Stat == Stat.Game) IsMouseVisible = false;
             else IsMouseVisible = true;
 
-            _player = (Player)_entities[0];
-
             if (_player._hasDead == true)
                 Stat = Stat.Dead;
 
@@ -155,22 +170,14 @@ namespace TheftInCybercity
                 case Stat.Game:                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
 
-                    foreach (var entity in _entities)
-                    {
-                        entity.Update(gameTime);
-                    }
-
+                    _player.Update(gameTime);
                     CheckCollision(gameTime);
-
-                    foreach (var entity in _entities)
-                    {
-                        entity.ApplyPhysics(gameTime);
-                    }
+                    _player.ApplyPhysics();
 
                     break;
 
                 case Stat.Dead:
-                    Exit();
+                    
                     break;
             }
 
@@ -195,11 +202,7 @@ namespace TheftInCybercity
                     {
                         sprite.Draw(gameTime, spriteBatch);
                     }
-
-                    foreach (var entity in _entities)
-                    {
-                        entity.Draw(gameTime, spriteBatch);
-                    }
+                    _player.Draw(gameTime, spriteBatch);
                     break;
 
                 case Stat.Pause:
@@ -216,15 +219,11 @@ namespace TheftInCybercity
         public void CheckCollision(GameTime gameTime)
         {
             var collidableSprites = _sprites.Where(c => c.CollisionType != CollisionTypes.None);
-            var collidableEntities = _entities.Where(c => c.CollisionType != CollisionTypes.None);
 
-            foreach (var entity in collidableEntities)
+            foreach (var sprite in collidableSprites)
             {
-                foreach (var sprite in collidableSprites)
-                {
-                    if (entity.WillIntersect(sprite))
-                        entity.OnCollide(sprite);
-                }
+                if (_player.WillIntersect(sprite))
+                    _player.OnCollide(sprite);
             }
         }
     }

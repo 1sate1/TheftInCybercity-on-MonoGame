@@ -4,7 +4,7 @@ using MonoGame.Extended;
 
 namespace TheftInCybercity
 {
-    public class Sprite : Component
+    public class Object : Component
     {
         public Texture2D _texture;
         public Vector2 _position;
@@ -22,7 +22,7 @@ namespace TheftInCybercity
             set { _position = value; }
         }
 
-        public Sprite(Texture2D texture, Vector2 position, CollisionTypes collisionType)
+        public Object(Texture2D texture, Vector2 position, CollisionTypes collisionType)
         {
             _texture = texture;
             _position = position;

@@ -7,9 +7,16 @@ using MonoGame.Extended.Sprites;
 namespace TheftInCybercity
 {
 #nullable disable
-    public class Player : Entity
+    public class Player : Component
     {
         #region Fields
+
+        public Vector2 _position;
+        public Vector2 _velocity;
+        protected Vector2 _origin;
+        public CollisionTypes CollisionType;
+
+        public AnimatedSprite _player;
 
         protected bool _onGround;
         public bool _hasJumped;
@@ -17,11 +24,37 @@ namespace TheftInCybercity
 
         #endregion
 
+        #region Properties
+
+        public Vector2 Velocity { get { return _velocity; } }
+
+        public Vector2 Origin { get { return _origin; } set { _origin = value; } }
+
+        public Vector2 Position
+        {
+            get { return _position; }
+            set { _position = value; }
+        }
+
+        public RectangleF CollisionBox
+        {
+            get
+            {
+                return new RectangleF(Position.X - Origin.X, Position.Y - Origin.Y, 123, 128);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
-        public Player(AnimatedSprite sprite, Vector2 position, CollisionTypes collisionType) : base(sprite, position, collisionType)
+        public Player(AnimatedSprite player, Vector2 position, CollisionTypes collisionType)
         {
-            sprite.Play("idle");
+            _player = player;
+            _position = position;
+            CollisionType = collisionType;
+            Origin = new Vector2(_player.TextureRegion.Width / 2, _player.TextureRegion.Height / 2);
+            _player.Play("idle");
             _hasDead = false;
         }
 
@@ -30,11 +63,11 @@ namespace TheftInCybercity
             Move();
 
             SetAnimations();
-            _entity.Update(gameTime);
+            _player.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) =>
-            spriteBatch.Draw(_entity, Position);
+            spriteBatch.Draw(_player, Position);
        
         protected void Move()
         {
@@ -47,29 +80,9 @@ namespace TheftInCybercity
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
                 _hasJumped = true;
-        }
+        }        
 
-        public override void OnCollide(Sprite sprite)
-        {
-            var onTop = this.WillIntersectTop(sprite);
-            var onLeft = this.WillIntersectLeft(sprite);
-            var onRight = this.WillIntersectRight(sprite);
-            var onBotton = this.WillIntersectBottom(sprite);
-
-            if (onTop)
-            {
-                _onGround = true;
-                _velocity.Y = sprite.CollisionBox.Top - this.CollisionBox.Bottom;
-            }
-            else if (onLeft && _velocity.X > 0)
-                _velocity.X = 0;
-            else if (onRight && _velocity.X < 0)
-                _velocity.X = 0;
-            else if (onBotton)
-                _velocity.Y = 1;
-        }
-
-        public override void ApplyPhysics(GameTime gameTime)
+        public void ApplyPhysics()
         {
             if (!_onGround)
                 _velocity.Y += 0.3f;
@@ -101,8 +114,72 @@ namespace TheftInCybercity
             else if (_velocity.Y > 0)
                 animation = "fall";
 
-            _entity.Play(animation);
+            _player.Play(animation);
         }
+
+        #region Collision
+
+        public void OnCollide(Object sprite)
+        {
+            var onTop = this.WillIntersectTop(sprite);
+            var onLeft = this.WillIntersectLeft(sprite);
+            var onRight = this.WillIntersectRight(sprite);
+            var onBotton = this.WillIntersectBottom(sprite);
+
+            if (onTop)
+            {
+                _onGround = true;
+                _velocity.Y = sprite.CollisionBox.Top - this.CollisionBox.Bottom;
+            }
+            else if (onLeft && _velocity.X > 0)
+                _velocity.X = 0;
+            else if (onRight && _velocity.X < 0)
+                _velocity.X = 0;
+            else if (onBotton)
+                _velocity.Y = 1;
+        }
+
+        public bool WillIntersect(Object sprite)
+        {
+            return this.WillIntersectBottom(sprite) ||
+              this.WillIntersectLeft(sprite) ||
+              this.WillIntersectRight(sprite) ||
+              this.WillIntersectTop(sprite);
+        }
+
+        public bool WillIntersectLeft(Object sprite)
+        {
+            return this.CollisionBox.Right + this._velocity.X >= sprite.CollisionBox.Left &&
+              this.CollisionBox.Left + this._velocity.X < sprite.CollisionBox.Left &&
+              this.CollisionBox.Top < sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Bottom > sprite.CollisionBox.Top;
+        }
+
+        public bool WillIntersectRight(Object sprite)
+        {
+            return this.CollisionBox.Left + this._velocity.X <= sprite.CollisionBox.Right &&
+              this.CollisionBox.Right > sprite.CollisionBox.Right &&
+              this.CollisionBox.Top < sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Bottom > sprite.CollisionBox.Top;
+        }
+
+        public bool WillIntersectTop(Object sprite)
+        {
+            return this.CollisionBox.Bottom + this._velocity.Y >= sprite.CollisionBox.Top &&
+              this.CollisionBox.Top < sprite.CollisionBox.Top &&
+              this.CollisionBox.Right > sprite.CollisionBox.Left &&
+              this.CollisionBox.Left < sprite.CollisionBox.Right;
+        }
+
+        public bool WillIntersectBottom(Object sprite)
+        {
+            return this.CollisionBox.Top + this._velocity.Y <= sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Bottom > sprite.CollisionBox.Bottom &&
+              this.CollisionBox.Right > sprite.CollisionBox.Left &&
+              this.CollisionBox.Left < sprite.CollisionBox.Right;
+        }
+
+        #endregion
 
         #endregion
     }
