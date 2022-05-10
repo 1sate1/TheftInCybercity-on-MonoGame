@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
@@ -19,15 +20,17 @@ namespace TheftInCybercity
     public class Game1 : Game
     {
         readonly GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
+        protected SpriteBatch spriteBatch;
 
-        private List<Object> _headers;
-        private List<Object> _sprites;
-        private Player _player;
+        protected List<Object> _headers;
+        protected List<Object> _sprites;
+        protected Player _player;
+
+        protected Song _music;
 
         Stat Stat = Stat.Menu;
-        private List<Component> _menuButtons;
-        private List<Component> _pauseButtons;
+        protected List<Component> _menuButtons;
+        protected List<Component> _pauseButtons;
 
         public Game1()
         {
@@ -48,6 +51,15 @@ namespace TheftInCybercity
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            #region Music
+
+            _music = Content.Load<Song>("music");
+            MediaPlayer.Play(_music);
+            MediaPlayer.Volume = (float)0.05;
+            MediaPlayer.IsRepeating = true;
+
+            #endregion
 
             #region Objects
 
@@ -159,7 +171,7 @@ namespace TheftInCybercity
             {
                 case Stat.Menu:
                     foreach (var button in _menuButtons)
-                        button.Update(gameTime);
+                        button.Update(gameTime);                   
                     break;
 
                 case Stat.Pause:
@@ -173,11 +185,10 @@ namespace TheftInCybercity
                     _player.Update(gameTime);
                     CheckCollision(gameTime);
                     _player.ApplyPhysics();
-
                     break;
 
                 case Stat.Dead:
-                    
+                    Exit();
                     break;
             }
 

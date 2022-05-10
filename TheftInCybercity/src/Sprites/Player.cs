@@ -79,7 +79,9 @@ namespace TheftInCybercity
                 _velocity.X = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) && _hasJumped == false)
+            {
                 _hasJumped = true;
+            }               
         }        
 
         public void ApplyPhysics()

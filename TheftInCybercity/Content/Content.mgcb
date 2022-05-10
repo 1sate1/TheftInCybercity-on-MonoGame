@@ -109,6 +109,12 @@
 /processorParam:TextureFormat=Color
 /build:Enemies/pig/Run (34x28).png
 
+#begin music.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music.mp3
+
 #begin Objects/1x1.png
 /importer:TextureImporter
 /processor:TextureProcessor
