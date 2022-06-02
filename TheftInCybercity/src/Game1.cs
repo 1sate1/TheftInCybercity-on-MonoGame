@@ -98,7 +98,7 @@ namespace TheftInCybercity
                 new Object(spawnC, new Vector2(0, 669), CollisionTypes.Full),
                 new Object(p5x1, new Vector2(300, 594), CollisionTypes.Full),
                 new Object(p3x1, new Vector2(700, 454), CollisionTypes.Full),
-                new Object(p5x1, new Vector2(300, 300), CollisionTypes.Full),
+                new Object(p5x1, new Vector2(1000, 400), CollisionTypes.Full),
             };
 
             _player = new Player(player, new Vector2(45, 605), CollisionTypes.Full);
@@ -181,10 +181,9 @@ namespace TheftInCybercity
 
                 case Stat.Game:                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Stat = Stat.Pause;
-
                     _player.Update(gameTime);
                     CheckCollision(gameTime);
-                    _player.ApplyPhysics();
+                    _player.ApplyPhysics();                   
                     break;
 
                 case Stat.Dead:
@@ -210,9 +209,7 @@ namespace TheftInCybercity
 
                 case Stat.Game:
                     foreach (var sprite in _sprites)
-                    {
                         sprite.Draw(gameTime, spriteBatch);
-                    }
                     _player.Draw(gameTime, spriteBatch);
                     break;
 
@@ -235,7 +232,7 @@ namespace TheftInCybercity
             {
                 if (_player.WillIntersect(sprite))
                     _player.OnCollide(sprite);
-            }
+            }                                   
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TheftInCybercity
         #region Fields
 
         public Vector2 _position;
-        public Vector2 _velocity;
+        protected Vector2 _velocity;
         protected Vector2 _origin;
         public CollisionTypes CollisionType;
 
@@ -92,7 +92,7 @@ namespace TheftInCybercity
             if (_onGround && _hasJumped)
                 _velocity.Y = -11f;
 
-            if (Position.Y >= 900)
+            if (Position.Y >= 800)
                 _hasDead = true;
 
             _onGround = false;
